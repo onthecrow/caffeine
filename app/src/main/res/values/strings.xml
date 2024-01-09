@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Caffeine</string>
+    <string name="tile_content_description">Caffeine service</string>
+    <string name="notification_title">Caffeine is working…</string>
+    <string name="notification_subtitle">Keeps the screen on</string>
+    <string name="channel_name">Caffeine service channel</string>
+    <string name="channel_description">This channel is used by caffeine service to show its notification</string>
+</resources>
