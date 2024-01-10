@@ -3,6 +3,7 @@ package com.onthecrow.caffeine.wakelock
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.core.app.ServiceCompat
 import com.onthecrow.caffeine.R
 import kotlinx.coroutines.MainScope
@@ -28,7 +30,11 @@ class WakeLockService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground()
+        if (intent?.hasExtra(EXTRA_SHUTDOWN) == true) {
+            stopSelf()
+        } else {
+            startForeground()
+        }
         return START_STICKY
     }
 
@@ -91,6 +97,17 @@ class WakeLockService : Service() {
                 NotificationCompat.BigTextStyle()
                     .bigText(getString(R.string.notification_subtitle))
             )
+            .setDeleteIntent(
+                PendingIntentCompat.getForegroundService(
+                    applicationContext,
+                    REQUEST_CODE_DELETE,
+                    Intent(applicationContext, WakeLockService::class.java).apply {
+                        putExtra(EXTRA_SHUTDOWN, true)
+                    },
+                    PendingIntent.FLAG_ONE_SHOT,
+                    false
+                )
+            )
             .setOngoing(true)
             .setSilent(true)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
@@ -120,5 +137,7 @@ class WakeLockService : Service() {
         private const val ID_FOREGROUND_SERVICE = 50561
         private const val ID_NOTIFICATION_CHANNEL = "34591234"
         private const val STATE_REPLAY_COUNT = 1
+        private const val REQUEST_CODE_DELETE = 3414352
+        private const val EXTRA_SHUTDOWN = "shutdown"
     }
 }
