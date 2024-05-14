@@ -7,12 +7,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
-import androidx.core.app.ServiceCompat
 import com.onthecrow.caffeine.R
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -71,20 +68,7 @@ class WakeLockService : Service() {
     }
 
     private fun startForeground() {
-        ServiceCompat.startForeground(
-            this,
-            ID_FOREGROUND_SERVICE,
-            createNotification(),
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-                } else {
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-                }
-            } else {
-                0
-            },
-        )
+        startForeground(ID_FOREGROUND_SERVICE, createNotification())
     }
 
     private fun createNotification(): Notification {
@@ -115,17 +99,15 @@ class WakeLockService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val importance = NotificationManager.IMPORTANCE_LOW
-            val channel = NotificationChannel(ID_NOTIFICATION_CHANNEL, name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val channel = NotificationChannel(ID_NOTIFICATION_CHANNEL, name, importance).apply {
+            description = descriptionText
         }
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     inner class Binder : android.os.Binder() {

@@ -10,11 +10,18 @@ import android.view.WindowManager
 
 class WakeLockViewWrapper(private val context: Context) {
 
-    private val view by lazy { View(context).apply { keepScreenOn = true } }
+    // todo Allow screen overlays on settings screen (developer settings)
+    private val view by lazy {
+        View(context).apply {
+            keepScreenOn = true
+        }
+    }
+
     private val windowManager by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
 
     fun isShown(): Boolean {
-        return view.parent != null
+        // todo maybe should replace || with &&
+        return view.parent != null || view.windowToken != null
     }
 
     fun show() {
