@@ -11,12 +11,14 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import com.onthecrow.caffeine.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class WakeLockService : Service() {
 
     private val wakeLockView by lazy { WakeLockViewWrapper(applicationContext) }

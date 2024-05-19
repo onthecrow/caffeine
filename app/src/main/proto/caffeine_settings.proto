@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.onthecrow.caffeine.data";
+option java_multiple_files = true;
+
+message CaffeineSettings {
+  repeated SettingsTimerOption timer_options = 1;
+  bool is_aggressive = 2;
+  bool is_automatically_turn_off = 3;
+}
+
+message SettingsTimerOption {
+  int32 id = 1;
+  bool is_active = 2;
+}

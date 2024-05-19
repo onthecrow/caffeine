@@ -21,9 +21,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.onthecrow.caffeine.tile.CaffeineTileService
 import com.onthecrow.caffeine.ui.theme.CaffeineTheme
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executor
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     val requestPermissionLauncher =

@@ -7,9 +7,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -25,11 +27,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.RenderMode
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCancellationBehavior
 import com.airbnb.lottie.compose.LottieClipSpec
@@ -99,64 +103,81 @@ fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
         Column {
             Row {
                 LottieAnimation(
-                    modifier = Modifier.size(100.dp),
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .weight(1f, false),
                     composition = lottieAnimatable.composition,
-                    progress = { lottieAnimatable.progress }
+                    progress = { lottieAnimatable.progress },
+                    contentScale = ContentScale.Crop,
+                    clipToCompositionBounds = false,
+                    maintainOriginalImageBounds = false,
+                    renderMode = RenderMode.AUTOMATIC,
+
                 )
-                Text(
-                    modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                    text = "It's",
-                    fontSize = 32.sp,
-                    style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold)
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                AnimatedContent(
-                    modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                    targetState = isActive.value,
-                    transitionSpec = {
-                        if (isActive.value) {
-                            // If the target number is larger, it slides up and fades in
-                            // while the initial (smaller) number slides up and fades out.
-                            ContentTransform(
-                                slideInVertically { height -> height } + fadeIn(),
-                                slideOutVertically { height -> -height } + fadeOut(),
-                                sizeTransform = SizeTransform(clip = false)
-                            )
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Row(modifier = Modifier.align(Alignment.Center)) {
+                        Text(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = "It's",
+                            fontSize = 32.sp,
+                            style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold)
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                        AnimatedContent(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            targetState = isActive.value,
+                            transitionSpec = {
+                                if (isActive.value) {
+                                    // If the target number is larger, it slides up and fades in
+                                    // while the initial (smaller) number slides up and fades out.
+                                    ContentTransform(
+                                        slideInVertically { height -> height } + fadeIn(),
+                                        slideOutVertically { height -> -height } + fadeOut(),
+                                        sizeTransform = SizeTransform(clip = false)
+                                    )
 //                        slideInVertically { height -> height } + fadeIn() with
 //                                slideOutVertically { height -> -height } + fadeOut()
-                        } else {
-                            // If the target number is smaller, it slides down and fades in
-                            // while the initial number slides down and fades out.
-                            ContentTransform(
-                                slideInVertically { height -> -height } + fadeIn(),
-                                slideOutVertically { height -> height } + fadeOut(),
-                                sizeTransform = SizeTransform(clip = false)
-                            )
+                                } else {
+                                    // If the target number is smaller, it slides down and fades in
+                                    // while the initial number slides down and fades out.
+                                    ContentTransform(
+                                        slideInVertically { height -> -height } + fadeIn(),
+                                        slideOutVertically { height -> height } + fadeOut(),
+                                        sizeTransform = SizeTransform(clip = false)
+                                    )
+                                }
+                            }
+                        ) {
+                            if (it) {
+                                Text(
+                                    text = "working",
+                                    color = MaterialTheme.colorScheme.primary,
+                                    style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold),
+                                    fontSize = 32.sp,
+                                )
+                            } else {
+                                Text(
+                                    text = "caffeine",
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                    style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold),
+                                    fontSize = 32.sp,
+                                    maxLines = 1,
+                                )
+                            }
                         }
-                    }
-                ) {
-                    if (it) {
                         Text(
-                            text = "working",
-                            color = MaterialTheme.colorScheme.primary,
-                            style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold),
-                            fontSize = 32.sp,
-                        )
-                    } else {
-                        Text(
-                            text = "caffeine",
-                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = "!",
                             style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold),
                             fontSize = 32.sp,
                         )
                     }
                 }
-                Text(
-                    modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                    text = "!",
-                    style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.ExtraBold),
-                    fontSize = 32.sp,
-                )
+                Spacer(modifier = Modifier
+                    .weight(1f, false))
             }
             Button(onClick = { isActive.value = isActive.value.not() }) {
                 Text(text = "Click me!")

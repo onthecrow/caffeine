@@ -9,6 +9,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.onthecrow.caffeine.wakelock.WakeLockService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,6 +20,7 @@ import java.util.Optional
 import kotlin.properties.Delegates
 
 
+@AndroidEntryPoint
 class CaffeineTileService : TileService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
