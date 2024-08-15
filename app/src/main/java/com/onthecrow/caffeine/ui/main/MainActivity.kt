@@ -1,4 +1,4 @@
-package com.onthecrow.caffeine
+package com.onthecrow.caffeine.ui.main
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.StatusBarManager
@@ -13,12 +13,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.onthecrow.caffeine.R
+import com.onthecrow.caffeine.RequestResult
 import com.onthecrow.caffeine.tile.CaffeineTileService
 import com.onthecrow.caffeine.ui.theme.CaffeineTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,12 +125,5 @@ class MainActivity : ComponentActivity() {
 //                binding.txtResult.text = resultFailureText
 //            }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CaffeineTheme {
     }
 }

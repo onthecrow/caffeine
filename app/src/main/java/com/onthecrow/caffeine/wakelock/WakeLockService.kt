@@ -59,6 +59,7 @@ class WakeLockService : Service() {
             updateState(WakeLockServiceState.INACTIVE)
         } else {
             wakeLockView.show()
+            wakeLockView.isPersistent = true
             updateState(WakeLockServiceState.ACTIVE)
         }
     }
