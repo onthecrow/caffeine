@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.provider.Settings
@@ -76,7 +77,9 @@ class MainActivity : ComponentActivity() {
                 requestPermissionLauncher.launch(POST_NOTIFICATIONS)
             }
         }
-        addTile()
+        if (Build.VERSION.SDK_INT >= TIRAMISU) {
+            addTile()
+        }
         checkOverlayPermission()
     }
 

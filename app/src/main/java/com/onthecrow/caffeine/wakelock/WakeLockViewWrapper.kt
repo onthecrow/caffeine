@@ -10,6 +10,7 @@ import com.onthecrow.caffeine.core.logger.FileLogger.log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
@@ -76,13 +77,15 @@ class WakeLockViewWrapper(private val context: Context) {
     }
 
     private fun toggleRenewalIfPersistent(shouldRenew: Boolean? = null) {
+        log("toggle persistent job (shouldRenew = $shouldRenew)")
         if (!isPersistent) {
             cancelPersistentJob()
             return
         }
         if (shouldRenew ?: (screenStateReceiver.currentScreenState == ScreenState.SCREEN_ON)) {
+            viewShownCheckerJob?.cancel()
             viewShownCheckerJob = MainScope().launch {
-                while (true) {
+                while (this.isActive) {
                     log("persistent job iteration")
                     delay(10000)
                     if (!isShown()) {
