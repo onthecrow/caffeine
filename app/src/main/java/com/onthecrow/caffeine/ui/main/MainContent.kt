@@ -57,14 +57,13 @@ import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.onthecrow.caffeine.R
 import com.onthecrow.caffeine.ui.common.ItemSettingsWithButton
+import com.onthecrow.caffeine.ui.common.ItemSettingsWithSwitch
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = /*MaterialTheme.colorScheme.background*/Color.White
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.anim_coffee_cup))
         val lottieAnimatable = rememberLottieAnimatable()
@@ -198,116 +197,33 @@ fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
                         .weight(1f, false)
                 )
             }
-            OutlinedCard(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Session settings",
-                    )
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .padding(top = 16.dp),
-                        text = "Duration",
-                    )
-                    LazyRow(
-                        modifier = Modifier
-                            .align(Alignment.End),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        reverseLayout = true
-                    ) {
-                        item() {
-                            ElevatedAssistChip(
-                                onClick = { /*TODO*/ },
-                                label = {
-                                    Text(
-                                        text = "Infinity",
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                },
-                                border = AssistChipDefaults.assistChipBorder(
-                                    enabled = true,
-                                    borderColor = MaterialTheme.colorScheme.primary
-                                )
-                            )
-                        }
-                        item {
-                            ElevatedAssistChip(
-                                onClick = { /*TODO*/ },
-                                label = { Text(text = "1 min", color = MaterialTheme.colorScheme.primary) },
-                            )
-                        }
-                    }
-                    Row(
-                        modifier = Modifier
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .weight(1f)
-                                .align(Alignment.CenterVertically),
-                            textAlign = TextAlign.End,
-                            text = "Agressive mode"
-                        )
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Switch(checked = true, onCheckedChange = {})
-                    }
-                    Row {
-                        Text(
-                            modifier = Modifier
-                                .weight(1f)
-                                .align(Alignment.CenterVertically),
-                            textAlign = TextAlign.End,
-                            text = "Automatic turn off"
-                        )
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Switch(checked = false, onCheckedChange = {})
-                    }
-                }
-
-            }
-            OutlinedCard(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        textAlign = TextAlign.Center,
-                        text = "Appearance settings"
-                    )
-                    Row {
-                        Text(
-                            modifier = Modifier
-                                .weight(1f)
-                                .align(Alignment.CenterVertically),
-                            textAlign = TextAlign.End,
-                            text = "Adaptive colors"
-                        )
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Switch(checked = false, onCheckedChange = {})
-                    }
-                    Text(modifier = Modifier.align(Alignment.CenterHorizontally), text = "Theme")
-                    SingleChoiceSegmentedButtonRow(
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        SegmentedButton(selected = true, onClick = { /*TODO*/ }, shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3)) {
-                            Text(text = "System")
-                        }
-                        SegmentedButton(selected = false, onClick = { /*TODO*/ }, shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3)) {
-                            Text(text = "Dark")
-                        }
-                        SegmentedButton(selected = false, onClick = { /*TODO*/ }, shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3)) {
-                            Text(text = "Light")
-                        }
-                    }
-                }
-            }
-            ItemSettingsWithButton(modifier = Modifier.fillMaxWidth(), title = "111")
+            ItemSettingsWithButton(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Duration",
+                buttonText = "Indefinite",
+                onClick = {}
+            )
+            ItemSettingsWithSwitch(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Persistent",
+                checked = true,
+                onCheckedChange = {},
+                onClick = {}
+            )
+            ItemSettingsWithSwitch(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Reboot persistent",
+                checked = true,
+                onCheckedChange = {},
+                onClick = {}
+            )
+            ItemSettingsWithSwitch(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Automatic turn off",
+                checked = true,
+                onCheckedChange = {},
+                onClick = {}
+            )
             Button(
                 modifier = Modifier
                     .padding(end = 8.dp)
