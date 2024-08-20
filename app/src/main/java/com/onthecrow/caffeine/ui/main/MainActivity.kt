@@ -13,9 +13,9 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.onthecrow.caffeine.R
@@ -48,8 +48,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CaffeineTheme {
-                val isActive = remember { mutableStateOf(false) }
-                MainContent(isActive)
+                val viewModel: MainViewModel by viewModels()
+                MainContent(
+                    viewModel.state.collectAsState().value,
+                    { viewModel.selectDuration(it) },
+                    { viewModel.setIsPersistent(it) },
+                    { viewModel.setIsRebootPersistent(it) },
+                    { viewModel.setIsAutomaticTurnOff(it) },
+                )
             }
         }
         when {

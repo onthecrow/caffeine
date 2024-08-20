@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,33 +16,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
-import androidx.compose.material3.ElevatedAssistChip
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,12 +41,20 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.onthecrow.caffeine.R
+import com.onthecrow.caffeine.data.CaffeineSettings
+import com.onthecrow.caffeine.data.SettingsTimerOption
 import com.onthecrow.caffeine.ui.common.ItemSettingsWithButton
 import com.onthecrow.caffeine.ui.common.ItemSettingsWithSwitch
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
+fun MainContent(
+    state: MainState,
+    selectDuration: (SettingsTimerOption) -> Unit,
+    togglePersistent: (Boolean) -> Unit,
+    toggleRebootPersistent: (Boolean) -> Unit,
+    toggleAutomaticTurnOff: (Boolean) -> Unit,
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -74,7 +67,7 @@ fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
             lottieAnimatable.snapTo(composition, progress = .5f)
         }
 
-        if (isActive.value) {
+        if (state.isActive) {
             LaunchedEffect(Unit) {
                 compositionScope.launch {
                     lottieAnimatable.animate(
@@ -144,9 +137,9 @@ fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
                         Spacer(modifier = Modifier.size(8.dp))
                         AnimatedContent(
                             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            targetState = isActive.value,
+                            targetState = state.isActive,
                             transitionSpec = {
-                                if (isActive.value) {
+                                if (state.isActive) {
                                     // If the target number is larger, it slides up and fades in
                                     // while the initial (smaller) number slides up and fades out.
                                     ContentTransform(
@@ -206,29 +199,30 @@ fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
             ItemSettingsWithSwitch(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Persistent",
-                checked = true,
-                onCheckedChange = {},
-                onClick = {}
+                checked = state.caffeineSettings.isPersistent,
+                onCheckedChange = { togglePersistent(it) },
+                onClick = { togglePersistent(!state.caffeineSettings.isPersistent) }
             )
             ItemSettingsWithSwitch(
                 modifier = Modifier.fillMaxWidth(),
-                title = "Reboot persistent",
-                checked = true,
-                onCheckedChange = {},
-                onClick = {}
+                title = "Restart on reboot",
+                checked = state.caffeineSettings.isRebootPersistent,
+                onCheckedChange = { toggleRebootPersistent(it) },
+                onClick = { toggleRebootPersistent(!state.caffeineSettings.isRebootPersistent) }
             )
             ItemSettingsWithSwitch(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Automatic turn off",
-                checked = true,
-                onCheckedChange = {},
-                onClick = {}
+                subtitle = "Turn Caffeine off on screen off",
+                checked = state.caffeineSettings.isAutomaticallyTurnOff,
+                onCheckedChange = { toggleAutomaticTurnOff(it) },
+                onClick = { toggleAutomaticTurnOff(!state.caffeineSettings.isAutomaticallyTurnOff) }
             )
             Button(
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .align(Alignment.End),
-                onClick = { isActive.value = isActive.value.not() },
+                onClick = { /*isActive.value = isActive.value.not()*/ },
             ) {
                 Text(text = "Click me!")
             }
@@ -239,5 +233,5 @@ fun MainContent(isActive: MutableState<Boolean> = mutableStateOf(false)) {
 @Preview
 @Composable
 fun MainContentPreview() {
-    MainContent()
+    MainContent(MainState(false, CaffeineSettings.DEFAULT), {}, {}, {}, {})
 }

@@ -5,8 +5,9 @@ option java_multiple_files = true;
 
 message CaffeineSettings {
   repeated SettingsTimerOption timer_options = 1;
-  bool is_aggressive = 2;
+  bool is_persistent = 2;
   bool is_automatically_turn_off = 3;
+  bool is_reboot_persistent = 4;
 }
 
 message SettingsTimerOption {

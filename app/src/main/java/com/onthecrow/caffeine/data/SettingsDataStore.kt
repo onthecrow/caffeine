@@ -6,7 +6,9 @@ import androidx.datastore.dataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SettingsDataStore @Inject constructor(
     @ApplicationContext
     private val context: Context,
@@ -18,8 +20,6 @@ class SettingsDataStore @Inject constructor(
     val settings: Flow<CaffeineSettings> = context.dataStore.data
 
     suspend fun updateSettings(settings: CaffeineSettings) {
-        context.dataStore.updateData {
-            settings
-        }
+        context.dataStore.updateData { settings }
     }
 }
