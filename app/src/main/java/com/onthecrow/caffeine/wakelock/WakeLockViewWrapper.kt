@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import com.onthecrow.caffeine.core.logger.FileLogger.log
 import kotlinx.coroutines.Job
@@ -54,12 +53,13 @@ class WakeLockViewWrapper(private val context: Context) {
 
     fun remove() {
         try {
+            cancelPersistentJob()
             (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).removeView(view)
-            view.invalidate()
-            (view.parent as ViewGroup).removeAllViews()
+//            view.invalidate()
+//            (view.parent as ViewGroup).removeAllViews()
             screenStateReceiver.unregister(context)
         } catch (error: Throwable) {
-            Log.d(javaClass.simpleName, error.toString())
+            log(error.toString())
         }
     }
 

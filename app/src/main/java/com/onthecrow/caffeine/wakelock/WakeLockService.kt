@@ -11,17 +11,29 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import com.onthecrow.caffeine.R
+import com.onthecrow.caffeine.data.SettingsDataStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class WakeLockService : Service() {
 
-    private val wakeLockView by lazy { WakeLockViewWrapper(applicationContext) }
+    @Inject
+    lateinit var settings: SettingsDataStore
+
+    private val wakeLockView by lazy(LazyThreadSafetyMode.NONE) {
+        WakeLockViewWrapper(
+            applicationContext
+        )
+    }
+    private val screenStateReceiver by lazy(LazyThreadSafetyMode.NONE) { ScreenStateReceiver() }
     private val state = MutableSharedFlow<WakeLockServiceState>(STATE_REPLAY_COUNT)
 
     init {
@@ -33,6 +45,8 @@ class WakeLockService : Service() {
             stopSelf()
         } else {
             startForeground()
+            startCaffeine()
+            screenStateReceiver.register(applicationContext, ::onScreenStateChanged)
         }
         return START_STICKY
     }
@@ -43,6 +57,7 @@ class WakeLockService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        screenStateReceiver.unregister(applicationContext)
         if (wakeLockView.isShown()) {
             wakeLockView.remove()
             updateState(WakeLockServiceState.INACTIVE)
@@ -53,16 +68,34 @@ class WakeLockService : Service() {
         return state
     }
 
-    fun toggle() {
-        if (wakeLockView.isShown()) {
-            wakeLockView.remove()
-            updateState(WakeLockServiceState.INACTIVE)
-        } else {
-            wakeLockView.show()
-            wakeLockView.isPersistent = true
-            updateState(WakeLockServiceState.ACTIVE)
+    fun startCaffeine() {
+        wakeLockView.show()
+        wakeLockView.isPersistent = true
+        MainScope().launch {
+            val currentSettings = settings.settings.first()
+            settings.updateSettings(currentSettings.copy(isStarted = true))
         }
+        updateState(WakeLockServiceState.ACTIVE)
     }
+
+//    fun toggle() {
+//        if (wakeLockView.isShown()) {
+//            wakeLockView.remove()
+//            MainScope().launch {
+//                val currentSettings = settings.settings.first()
+//                settings.updateSettings(currentSettings.copy(isStarted = false))
+//            }
+//            updateState(WakeLockServiceState.INACTIVE)
+//        } else {
+//            wakeLockView.show()
+//            wakeLockView.isPersistent = true
+//            MainScope().launch {
+//                val currentSettings = settings.settings.first()
+//                settings.updateSettings(currentSettings.copy(isStarted = true))
+//            }
+//            updateState(WakeLockServiceState.ACTIVE)
+//        }
+//    }
 
     private fun updateState(newState: WakeLockServiceState) {
         MainScope().launch {
@@ -111,6 +144,16 @@ class WakeLockService : Service() {
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun onScreenStateChanged(screenState: ScreenState) {
+        MainScope().launch {
+            val isAutomaticallyTurnOff =
+                settings.settings.firstOrNull()?.isAutomaticallyTurnOff ?: false
+            if (screenState == ScreenState.SCREEN_OFF && isAutomaticallyTurnOff) {
+                stopSelf()
+            }
+        }
     }
 
     inner class Binder : android.os.Binder() {

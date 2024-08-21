@@ -18,6 +18,7 @@ data class CaffeineSettings(
     val isPersistent: Boolean,
     val isRebootPersistent: Boolean,
     val isAutomaticallyTurnOff: Boolean,
+    val isStarted: Boolean,
 ) {
     companion object {
         val DEFAULT get() = CaffeineSettings(
@@ -30,6 +31,7 @@ data class CaffeineSettings(
             isPersistent = true,
             isRebootPersistent = true,
             isAutomaticallyTurnOff = false,
+            isStarted = false,
         )
     }
 }

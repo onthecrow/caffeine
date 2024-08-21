@@ -9,13 +9,16 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.onthecrow.caffeine.wakelock.WakeLockService
+import com.onthecrow.caffeine.wakelock.WakeLockServiceState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.util.Optional
 import kotlin.properties.Delegates
 
@@ -25,7 +28,6 @@ class CaffeineTileService : TileService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
     private val serviceConnection by lazy { initServiceConnection() }
-    private var shouldToggle: Boolean = false
     private var tileState by Delegates.observable(CaffeineTileState()) { _, _, _ ->
         requestListeningState(
             applicationContext,
@@ -61,10 +63,15 @@ class CaffeineTileService : TileService() {
     override fun onClick() {
         super.onClick()
         if (wakelockService.isPresent) {
-            wakelockService.get().toggle()
-            unbindWakeLockService(true)
+            coroutineScope.launch {
+                val isWorking = wakelockService.get().getStateFlow().firstOrNull()
+                if (isWorking == WakeLockServiceState.ACTIVE) {
+                    unbindWakeLockService(true)
+                } else {
+                    wakelockService.get().startCaffeine()
+                }
+            }
         } else {
-            shouldToggle = true
             bindWakeLockService(true)
         }
         Log.d(
@@ -127,10 +134,6 @@ class CaffeineTileService : TileService() {
                     .map(::mapWakeLockStateToTileState)
                     .onEach { newState -> tileState = newState }
                     .launchIn(coroutineScope)
-                if (shouldToggle) {
-                    shouldToggle = false
-                    wakelockService.get().toggle()
-                }
             }
 
             override fun onServiceDisconnected(componentName: ComponentName) {
