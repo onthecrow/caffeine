@@ -4,13 +4,8 @@ option java_package = "com.onthecrow.caffeine.data";
 option java_multiple_files = true;
 
 message CaffeineSettings {
-  repeated SettingsTimerOption timer_options = 1;
-  bool is_persistent = 2;
-  bool is_automatically_turn_off = 3;
-  bool is_reboot_persistent = 4;
-}
-
-message SettingsTimerOption {
-  int32 id = 1;
-  bool is_active = 2;
+  bool is_persistent = 1;
+  bool is_automatically_turn_off = 2;
+  bool is_reboot_persistent = 3;
+  bool is_started = 4;
 }

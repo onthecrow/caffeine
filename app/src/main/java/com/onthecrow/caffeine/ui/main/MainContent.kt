@@ -23,11 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,16 +43,14 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieAnimatable
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.onthecrow.caffeine.R
-import com.onthecrow.caffeine.data.CaffeineSettings
-import com.onthecrow.caffeine.data.SettingsTimerOption
-import com.onthecrow.caffeine.ui.common.ItemSettingsWithButton
 import com.onthecrow.caffeine.ui.common.ItemSettingsWithSwitch
+import com.onthecrow.caffeine.ui.easter.Hamsters
+import com.onthecrow.caffeine.ui.footer.SignatureFooter
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainContent(
     state: MainState,
-    selectDuration: (SettingsTimerOption) -> Unit,
     togglePersistent: (Boolean) -> Unit,
     toggleRebootPersistent: (Boolean) -> Unit,
     toggleAutomaticTurnOff: (Boolean) -> Unit,
@@ -61,13 +61,13 @@ fun MainContent(
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.anim_coffee_cup))
         val lottieAnimatable = rememberLottieAnimatable()
         val compositionScope = rememberCoroutineScope()
-        val density = LocalDensity.current
+        var enabled by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             lottieAnimatable.snapTo(composition, progress = .5f)
         }
 
-        if (state.isActive) {
+        if (enabled/*state.isActive*/) {
             LaunchedEffect(Unit) {
                 compositionScope.launch {
                     lottieAnimatable.animate(
@@ -190,12 +190,6 @@ fun MainContent(
                         .weight(1f, false)
                 )
             }
-            ItemSettingsWithButton(
-                modifier = Modifier.fillMaxWidth(),
-                title = "Duration",
-                buttonText = "Indefinite",
-                onClick = {}
-            )
             ItemSettingsWithSwitch(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Persistent",
@@ -218,14 +212,21 @@ fun MainContent(
                 onCheckedChange = { toggleAutomaticTurnOff(it) },
                 onClick = { toggleAutomaticTurnOff(!state.caffeineSettings.isAutomaticallyTurnOff) }
             )
+
             Button(
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .align(Alignment.End),
-                onClick = { /*isActive.value = isActive.value.not()*/ },
+                onClick = { enabled = !enabled },
             ) {
                 Text(text = "Click me!")
             }
+            Hamsters(
+                modifier = Modifier.fillMaxWidth(),
+                isRunning = enabled,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            SignatureFooter(modifier = Modifier.fillMaxWidth())
         }
     }
 }
@@ -233,5 +234,5 @@ fun MainContent(
 @Preview
 @Composable
 fun MainContentPreview() {
-    MainContent(MainState(false, CaffeineSettings.DEFAULT), {}, {}, {}, {})
+    MainContent(MainState(), {}, {}, {})
 }

@@ -2,9 +2,7 @@ package com.onthecrow.caffeine.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.onthecrow.caffeine.data.CaffeineSettings
 import com.onthecrow.caffeine.data.SettingsDataStore
-import com.onthecrow.caffeine.data.SettingsTimerOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,13 +20,13 @@ class MainViewModel @Inject constructor(
 
     private val isActive: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    val state: StateFlow<MainState> get() = isActive.combine(settingsDataStore.settings) { isActive, settings ->
+    // todo separate UI state and datastore, add debounce
+    val state: StateFlow<MainState> get() = combine(
+        isActive,
+        settingsDataStore.settings,
+    ) { isActive, settings ->
         MainState(isActive, settings)
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, MainState(false, CaffeineSettings.DEFAULT))
-
-    fun selectDuration(settingsTimerOption: SettingsTimerOption) {
-        TODO("Not yet implemented")
-    }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, MainState())
 
     fun setIsPersistent(isPersistent: Boolean) {
         viewModelScope.launch {

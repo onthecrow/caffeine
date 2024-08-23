@@ -29,6 +29,8 @@ import java.util.concurrent.Executor
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    val viewModel: MainViewModel by viewModels()
+
     val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -48,10 +50,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CaffeineTheme {
-                val viewModel: MainViewModel by viewModels()
                 MainContent(
                     viewModel.state.collectAsState().value,
-                    { viewModel.selectDuration(it) },
                     { viewModel.setIsPersistent(it) },
                     { viewModel.setIsRebootPersistent(it) },
                     { viewModel.setIsAutomaticTurnOff(it) },

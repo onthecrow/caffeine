@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.hilt)
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.35.0-alpha")
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
