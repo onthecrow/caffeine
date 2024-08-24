@@ -227,6 +227,7 @@ fun MainContent(
             )
             Spacer(modifier = Modifier.weight(1f))
             SignatureFooter(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.size(8.dp))
         }
     }
 }
