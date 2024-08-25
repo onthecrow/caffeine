@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 val lightRed = Color(0xFFFF6388)
 val lightRedDisabled = Color(0xFFFF95ae)
+val mintGreen = Color(0xFF44a16b)

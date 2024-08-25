@@ -18,10 +18,12 @@ fun mapWakeLockStateToTileState(wakeLockServiceState: WakeLockServiceState): Caf
         state = when (wakeLockServiceState) {
             WakeLockServiceState.INACTIVE -> Tile.STATE_INACTIVE
             WakeLockServiceState.ACTIVE -> Tile.STATE_ACTIVE
+            WakeLockServiceState.CREATED -> Tile.STATE_INACTIVE
         },
         icon = when (wakeLockServiceState) {
             WakeLockServiceState.INACTIVE -> R.drawable.ic_inactive
             WakeLockServiceState.ACTIVE -> R.drawable.ic_active
+            WakeLockServiceState.CREATED -> R.drawable.ic_inactive
         }
     )
 }

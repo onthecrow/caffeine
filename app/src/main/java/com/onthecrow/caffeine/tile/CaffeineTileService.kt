@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.service.quicksettings.TileService
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.onthecrow.caffeine.core.logger.FileLogger.log
 import com.onthecrow.caffeine.wakelock.WakeLockService
 import com.onthecrow.caffeine.wakelock.WakeLockServiceState
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,11 +29,9 @@ class CaffeineTileService : TileService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
     private val serviceConnection by lazy { initServiceConnection() }
+    // todo need to fix it's broken on reboot
     private var tileState by Delegates.observable(CaffeineTileState()) { _, _, _ ->
-        requestListeningState(
-            applicationContext,
-            ComponentName(applicationContext, CaffeineTileService::class.java)
-        )
+        updateTileState()
     }
     private var wakeLockStateSubscription: Job? = null
     private var wakelockService = Optional.empty<WakeLockService>()
@@ -57,7 +56,7 @@ class CaffeineTileService : TileService() {
     override fun onStartListening() {
         super.onStartListening()
         Log.d(this@CaffeineTileService.javaClass.simpleName, "onStartListening()")
-        updateTileState()
+        bindWakeLockService()
     }
 
     override fun onClick() {
@@ -80,9 +79,9 @@ class CaffeineTileService : TileService() {
         )
     }
 
-    private fun bindWakeLockService(shouldCreate: Boolean = false) {
+    private fun bindWakeLockService(shouldStart: Boolean = false) {
         try {
-            if (shouldCreate) {
+            if (shouldStart) {
                 ContextCompat.startForegroundService(
                     applicationContext,
                     Intent(applicationContext, WakeLockService::class.java)
@@ -95,7 +94,9 @@ class CaffeineTileService : TileService() {
             )
         } catch (error: Throwable) {
             tileState = CaffeineTileState()
+            updateTileState()
             Log.e(javaClass.simpleName, error.message, error)
+            log(error.toString())
         }
     }
 

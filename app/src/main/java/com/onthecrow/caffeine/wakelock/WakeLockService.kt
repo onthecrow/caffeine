@@ -11,13 +11,15 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import com.onthecrow.caffeine.R
+import com.onthecrow.caffeine.core.logger.FileLogger.log
 import com.onthecrow.caffeine.data.SettingsDataStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,16 +36,12 @@ class WakeLockService : Service() {
         )
     }
     private val screenStateReceiver by lazy(LazyThreadSafetyMode.NONE) { ScreenStateReceiver() }
-    private val state = MutableSharedFlow<WakeLockServiceState>(STATE_REPLAY_COUNT)
-
-    init {
-        updateState(WakeLockServiceState.INACTIVE)
-    }
+    private val state = MutableStateFlow(WakeLockServiceState.CREATED)
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.hasExtra(EXTRA_SHUTDOWN) == true) {
-            stopSelf()
-        } else {
+        log("WakeLockService ${android.os.Process.myPid()}")
+        if (state.value == WakeLockServiceState.CREATED) {
+            state.update { WakeLockServiceState.INACTIVE }
             startForeground()
             startCaffeine()
             screenStateReceiver.register(applicationContext, ::onScreenStateChanged)
@@ -70,6 +68,7 @@ class WakeLockService : Service() {
 
     fun startCaffeine() {
         wakeLockView.show()
+        // todo make it depends on settings
         wakeLockView.isPersistent = true
         MainScope().launch {
             val currentSettings = settings.settings.first()
@@ -78,29 +77,8 @@ class WakeLockService : Service() {
         updateState(WakeLockServiceState.ACTIVE)
     }
 
-//    fun toggle() {
-//        if (wakeLockView.isShown()) {
-//            wakeLockView.remove()
-//            MainScope().launch {
-//                val currentSettings = settings.settings.first()
-//                settings.updateSettings(currentSettings.copy(isStarted = false))
-//            }
-//            updateState(WakeLockServiceState.INACTIVE)
-//        } else {
-//            wakeLockView.show()
-//            wakeLockView.isPersistent = true
-//            MainScope().launch {
-//                val currentSettings = settings.settings.first()
-//                settings.updateSettings(currentSettings.copy(isStarted = true))
-//            }
-//            updateState(WakeLockServiceState.ACTIVE)
-//        }
-//    }
-
     private fun updateState(newState: WakeLockServiceState) {
-        MainScope().launch {
-            state.emit(newState)
-        }
+        state.update { newState }
     }
 
     private fun startForeground() {

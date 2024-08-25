@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
                     { viewModel.setIsPersistent(it) },
                     { viewModel.setIsRebootPersistent(it) },
                     { viewModel.setIsAutomaticTurnOff(it) },
+                    { viewModel.onHeaderTap() }
                 )
             }
         }
