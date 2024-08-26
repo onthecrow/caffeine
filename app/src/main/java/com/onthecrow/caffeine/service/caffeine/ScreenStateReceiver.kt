@@ -1,4 +1,4 @@
-package com.onthecrow.caffeine.wakelock
+package com.onthecrow.caffeine.service.caffeine
 
 import android.content.BroadcastReceiver
 import android.content.Context

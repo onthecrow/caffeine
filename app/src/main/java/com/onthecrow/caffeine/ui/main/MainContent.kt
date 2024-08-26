@@ -13,10 +13,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -40,14 +36,14 @@ fun MainContent(
     toggleRebootPersistent: (Boolean) -> Unit,
     toggleAutomaticTurnOff: (Boolean) -> Unit,
     onHeaderClick: () -> Unit,
+    onRunButtonClick: (shouldRun: Boolean) -> Unit,
+    isActive: Boolean,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
-        var enabled by remember { mutableStateOf(false) }
-
         Column {
-            CaffeineHeader(enabled, onHeaderClick)
+            CaffeineHeader(isActive, onHeaderClick)
             ItemSettingsWithSwitch(
                 modifier = Modifier.fillMaxWidth(),
                 title = "Persistent",
@@ -93,7 +89,7 @@ fun MainContent(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .align(Alignment.End),
-                onClick = { enabled = !enabled },
+                onClick = {  },
             ) {
                 Text(text = "Repeat onboarding")
             }
@@ -101,7 +97,8 @@ fun MainContent(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .align(Alignment.End),
-                isRunning = enabled,
+                onRunButtonClick = onRunButtonClick,
+                isRunning = isActive,
             )
             Spacer(modifier = Modifier.weight(1f))
             SignatureFooter(modifier = Modifier.fillMaxWidth())
@@ -124,5 +121,5 @@ fun MainContent(
 @Preview
 @Composable
 fun MainContentPreview() {
-    MainContent(MainState(), {}, {}, {}, {})
+    MainContent(MainState(), {}, {}, {}, {}, {}, false)
 }

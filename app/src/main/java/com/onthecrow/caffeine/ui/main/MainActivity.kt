@@ -15,19 +15,27 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.onthecrow.caffeine.R
 import com.onthecrow.caffeine.RequestResult
-import com.onthecrow.caffeine.tile.CaffeineTileService
+import com.onthecrow.caffeine.service.caffeine.CaffeineServiceConnectionManager
+import com.onthecrow.caffeine.service.caffeine.CaffeineServiceState
+import com.onthecrow.caffeine.service.tile.CaffeineTileService
 import com.onthecrow.caffeine.ui.theme.CaffeineTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.map
 import java.util.concurrent.Executor
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var caffeineServiceConnectionManager: CaffeineServiceConnectionManager
 
     val viewModel: MainViewModel by viewModels()
 
@@ -50,12 +58,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CaffeineTheme {
+                val isActive: State<Boolean> = caffeineServiceConnectionManager.serviceState
+                    .map { it == CaffeineServiceState.ACTIVE }
+                    .collectAsState(false)
                 MainContent(
                     viewModel.state.collectAsState().value,
                     { viewModel.setIsPersistent(it) },
                     { viewModel.setIsRebootPersistent(it) },
                     { viewModel.setIsAutomaticTurnOff(it) },
-                    { viewModel.onHeaderTap() }
+                    { viewModel.onHeaderTap() },
+                    { viewModel.onRunButtonClick(it) },
+                    isActive.value,
                 )
             }
         }

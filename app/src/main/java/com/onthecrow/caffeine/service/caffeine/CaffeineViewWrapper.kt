@@ -1,4 +1,4 @@
-package com.onthecrow.caffeine.wakelock
+package com.onthecrow.caffeine.service.caffeine
 
 import android.content.Context
 import android.graphics.PixelFormat
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 
-class WakeLockViewWrapper(private val context: Context) {
+class CaffeineViewWrapper(private val context: Context) {
 
     /**
      * Workaround to make it more persistent because of Android clears system overlay every 24 hours approx.

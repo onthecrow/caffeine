@@ -96,6 +96,7 @@ fun CaffeineHeader(isCaffeineActive: Boolean = false, onHeaderClick: (() -> Unit
             .height(height = 110.dp)
             .clickable(interactionSource = null, indication = null) { onHeaderClick?.invoke() }
     ) {
+        // todo animation is stuck if the caffeine is active and it's cold start
         LottieAnimation(
             modifier = Modifier
                 .align(Alignment.CenterStart)

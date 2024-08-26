@@ -3,6 +3,7 @@ package com.onthecrow.caffeine.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onthecrow.caffeine.data.SettingsDataStore
+import com.onthecrow.caffeine.service.caffeine.CaffeineServiceConnectionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val settingsDataStore: SettingsDataStore
+    private val settingsDataStore: SettingsDataStore,
+    private val caffeineServiceConnectionManager: CaffeineServiceConnectionManager,
 ) : ViewModel() {
 
     private var tapsCount: Int = 0
@@ -74,6 +76,14 @@ class MainViewModel @Inject constructor(
                 delay(DELAY_EASTER_TAP_COUNTER)
                 tapsCount = 0
             }
+        }
+    }
+
+    fun onRunButtonClick(shouldRun: Boolean) {
+        if (shouldRun) {
+            caffeineServiceConnectionManager.start()
+        } else {
+            caffeineServiceConnectionManager.stop()
         }
     }
 
