@@ -87,6 +87,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onOnboardingButtonClick() {
+        _state.update {
+            val onboardingState = it.onboardingDialogState
+            it.copy(onboardingDialogState = onboardingState.copy(isShowing = !onboardingState.isShowing))
+        }
+    }
+
     companion object {
         private const val DEBOUNCE_SETTINGS_APPLY = 300L
         private const val EASTER_TAPS_TO_ANIMATION = 4

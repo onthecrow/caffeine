@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
                     { viewModel.setIsAutomaticTurnOff(it) },
                     { viewModel.onHeaderTap() },
                     { viewModel.onRunButtonClick(it) },
+                    { viewModel.onOnboardingButtonClick() },
                     isActive.value,
                 )
             }

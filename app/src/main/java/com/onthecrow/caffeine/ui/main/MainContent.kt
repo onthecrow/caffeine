@@ -37,6 +37,7 @@ fun MainContent(
     toggleAutomaticTurnOff: (Boolean) -> Unit,
     onHeaderClick: () -> Unit,
     onRunButtonClick: (shouldRun: Boolean) -> Unit,
+    onOnboardingButtonClick: () -> Unit,
     isActive: Boolean,
 ) {
     Surface(
@@ -89,7 +90,7 @@ fun MainContent(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .align(Alignment.End),
-                onClick = {  },
+                onClick = { onOnboardingButtonClick() },
             ) {
                 Text(text = "Repeat onboarding")
             }
@@ -112,8 +113,8 @@ fun MainContent(
                 isRunning = state.isEasterAnimationRunning,
             )
         }
-        if (false) {
-            OnboardingDialog(onDismissRequest = {})
+        if (state.onboardingDialogState.isShowing) {
+            OnboardingDialog { onOnboardingButtonClick() }
         }
     }
 }
@@ -121,5 +122,5 @@ fun MainContent(
 @Preview
 @Composable
 fun MainContentPreview() {
-    MainContent(MainState(), {}, {}, {}, {}, {}, false)
+    MainContent(MainState(), {}, {}, {}, {}, {}, {}, false)
 }

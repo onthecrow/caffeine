@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -94,7 +96,7 @@ fun CaffeineHeader(isCaffeineActive: Boolean = false, onHeaderClick: (() -> Unit
         modifier = Modifier
             .fillMaxWidth()
             .height(height = 110.dp)
-            .clickable(interactionSource = null, indication = null) { onHeaderClick?.invoke() }
+            .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { onHeaderClick?.invoke() }
     ) {
         // todo animation is stuck if the caffeine is active and it's cold start
         LottieAnimation(
