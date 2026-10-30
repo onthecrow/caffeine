@@ -29,7 +29,8 @@ object FileLogger: Logger {
     }
 
     override fun log(message: String) {
-        checkIfInitialized()
+        // No-op when not initialized (release builds don't initialize file logging).
+        if (!::logFile.isInitialized) return
         val logMessageString = buildString {
             append(dateFormatter.format(Date()))
             append(' ')
@@ -44,12 +45,6 @@ object FileLogger: Logger {
             stream.bufferedWriter().use { writer ->
                 writer.appendLine(logMessageString)
             }
-        }
-    }
-
-    private fun checkIfInitialized() {
-        if (!::logFile.isInitialized) {
-            throw IllegalStateException("You should call FileLogger.initialize() in Application.onCreate()!")
         }
     }
 

@@ -7,4 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Shown during cold start and behind the transparent system bars (light theme). -->
+    <color name="window_background">#FFFFFBFE</color>
 </resources>

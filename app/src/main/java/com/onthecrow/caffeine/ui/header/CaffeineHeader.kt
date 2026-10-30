@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -45,7 +46,8 @@ import com.onthecrow.caffeine.R
 @Composable
 fun CaffeineHeader(isCaffeineActive: Boolean = false, onHeaderClick: (() -> Unit)? = null) {
 
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.anim_coffee_cup))
+    val animationRes = if (isSystemInDarkTheme()) R.raw.anim_coffee_cup_dark else R.raw.anim_coffee_cup
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animationRes))
     val lottieAnimatable = rememberLottieAnimatable()
 
     LaunchedEffect(composition) {

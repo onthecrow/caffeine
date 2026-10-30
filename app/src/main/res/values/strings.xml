@@ -5,4 +5,22 @@
     <string name="notification_subtitle">Keeps the screen on</string>
     <string name="channel_name">Caffeine service channel</string>
     <string name="channel_description">This channel is used by caffeine service to show its notification</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_grant_button">Grant permission</string>
+    <string name="onboarding_granted_note">Permission is granted</string>
+
+    <string name="onboarding_overlay_headline">Display over other apps</string>
+    <string name="onboarding_overlay_text">Caffeine keeps your screen awake with an invisible overlay. This permission is required — without it the app can\'t work.</string>
+
+    <string name="onboarding_notifications_headline">Notifications</string>
+    <string name="onboarding_notifications_text">Allow notifications so Caffeine can show an ongoing notification while it keeps the screen on. The service still runs without it, but you won\'t see or be able to stop it from the status bar.</string>
+
+    <string name="onboarding_battery_headline">Background activity</string>
+    <string name="onboarding_battery_text">Keep Caffeine running reliably in the background and after a reboot. Open the app settings and allow background activity — choose \"Unrestricted\", or on some phones \"Allow background activity\" instead of \"Restrict\".</string>
+    <string name="onboarding_battery_button">Open settings</string>
+
+    <string name="onboarding_tile_headline">Quick Settings tile</string>
+    <string name="onboarding_tile_text">Add a Caffeine tile to your Quick Settings panel to toggle the screen-awake service with a single tap.</string>
+    <string name="onboarding_tile_button">Add tile</string>
 </resources>

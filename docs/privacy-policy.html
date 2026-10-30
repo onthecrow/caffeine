@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caffeine — Privacy Policy</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #5a5a5a;
+    --accent: #ff4757;
+    --rule: #e6e6e6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141218;
+      --fg: #ececec;
+      --muted: #a0a0a0;
+      --accent: #ff6b7d;
+      --rule: #2a2a2a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; }
+  h2 { font-size: 1.2rem; margin: 36px 0 8px; }
+  .updated { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+  a { color: var(--accent); }
+  strong { font-weight: 600; }
+  ul { padding-left: 22px; }
+  li { margin: 6px 0; }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 36px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Privacy Policy for Caffeine</h1>
+  <p class="updated">Last updated: 2026-10-29</p>
+
+  <p>Caffeine (“the app”) is a utility that keeps your device’s screen awake. This policy
+  explains what data the app does and does not handle.</p>
+
+  <h2>Data we collect</h2>
+  <p><strong>None.</strong> Caffeine does not collect, transmit, or share any personal or
+  sensitive user data. There are no accounts, no analytics, no advertising, no tracking, and
+  no third-party SDKs that send data off your device. The app does not use the internet.</p>
+
+  <h2>Data stored on your device</h2>
+  <ul>
+    <li><strong>Settings.</strong> Your preferences (Persistent, Restart on reboot, Automatic
+    turn off, etc.) are stored locally on your device only. They never leave the device and are
+    removed when you uninstall the app.</li>
+    <li><strong>Diagnostic logs (debug builds only).</strong> Development builds may write local
+    diagnostic logs to the app’s private storage to help with debugging. Release builds published
+    to users do not write these logs, and no logs are ever transmitted anywhere.</li>
+  </ul>
+
+  <h2>Permissions</h2>
+  <p>Caffeine requests the following permissions solely to provide its functionality, not to
+  collect data:</p>
+  <ul>
+    <li><strong>Display over other apps</strong> — used to place an invisible view that keeps the
+    screen on. Required for the core feature.</li>
+    <li><strong>Notifications</strong> — used to show the ongoing notification while the
+    keep-awake service is running.</li>
+    <li><strong>Foreground service</strong> — used to keep the screen-awake service running
+    reliably while active.</li>
+    <li><strong>Run at startup</strong> — used only if you enable “Restart on reboot”, to turn
+    Caffeine back on after your device restarts.</li>
+    <li><strong>Wake lock</strong> — declared for keep-awake functionality.</li>
+  </ul>
+  <p>You may also optionally allow background activity / exclude the app from battery optimization
+  via your system settings; this is entirely user-initiated and involves no data.</p>
+
+  <h2>Children</h2>
+  <p>Caffeine is not directed at children and does not knowingly collect any data from anyone.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be posted at the same location with a new
+  “Last updated” date.</p>
+
+  <hr>
+  <h2>Contact</h2>
+  <p>If you have any questions about this policy, contact: <strong>voronovthedeveloper@gmail.com</strong></p>
+</main>
+</body>
+</html>
