@@ -60,6 +60,7 @@ private fun ItemSettings(
     trailingContent: @Composable () -> Unit,
     subtitle: String? = null,
     description: String? = null,
+    titleColor: Color = Color.Unspecified,
 ) {
     Box(
         modifier
@@ -92,6 +93,7 @@ private fun ItemSettings(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 16.sp,
+                        color = titleColor,
                     )
                     if (subtitle != null) {
                         Text(
@@ -255,6 +257,27 @@ fun ItemSettingsWithButton(
                 color = MaterialTheme.colorScheme.primary,
             )
         }
+    )
+}
+
+/** A full-width settings row styled like [ItemSettingsWithSwitch] but with no trailing control. */
+@Composable
+fun ItemSettingsClickable(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    subtitle: String? = null,
+    description: String? = null,
+    titleColor: Color = Color.Unspecified,
+) {
+    ItemSettings(
+        modifier = modifier,
+        title = title,
+        subtitle = subtitle,
+        description = description,
+        onClick = onClick,
+        titleColor = titleColor,
+        trailingContent = {},
     )
 }
 

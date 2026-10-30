@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.onthecrow.caffeine.BuildConfig
 import com.onthecrow.caffeine.R
 import com.onthecrow.caffeine.data.permission.OnboardingPermission
+import com.onthecrow.caffeine.ui.common.ItemSettingsClickable
 import com.onthecrow.caffeine.ui.common.ItemSettingsWithSwitch
 import com.onthecrow.caffeine.ui.common.RunButton
 import com.onthecrow.caffeine.ui.easter.Hamsters
@@ -106,6 +106,16 @@ fun MainContent(
                 onCheckedChange = { toggleAutomaticTurnOff(it) },
                 onClick = { toggleAutomaticTurnOff(!state.caffeineSettings.isAutomaticallyTurnOff) }
             )
+            ItemSettingsClickable(
+                modifier = Modifier.fillMaxWidth(),
+                title = "Privacy Policy",
+                titleColor = MaterialTheme.colorScheme.primary,
+                onClick = {
+                    context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL))
+                    )
+                },
+            )
             Spacer(modifier = Modifier.size(16.dp))
             val requiredPermissionsGranted = state.onboardingDialogState.slides
                 .firstOrNull { it.permission == OnboardingPermission.OVERLAY }?.isGranted == true
@@ -136,18 +146,6 @@ fun MainContent(
                 onClick = { onOnboardingButtonClick() },
             ) {
                 Text(text = "Repeat onboarding")
-            }
-            TextButton(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .align(Alignment.End),
-                onClick = {
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL))
-                    )
-                },
-            ) {
-                Text(text = "Privacy Policy")
             }
             RunButton(
                 modifier = Modifier
