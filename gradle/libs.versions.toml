@@ -16,6 +16,9 @@ kotlinxSerialization = "2.1.0"
 protobuf = "1.8.0"
 collectionsImmutable = "0.3.7"
 timber = "5.0.1"
+firebaseBom = "33.7.0"
+googleServices = "4.4.2"
+firebaseCrashlyticsPlugin = "3.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +42,9 @@ lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = 
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version.ref = "protobuf" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -47,3 +53,5 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }

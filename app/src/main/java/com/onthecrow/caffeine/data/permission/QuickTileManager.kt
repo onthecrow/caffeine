@@ -37,7 +37,7 @@ class QuickTileManager @Inject constructor(
         context.getSystemService(StatusBarManager::class.java).requestAddTileService(
             ComponentName(context, CaffeineTileService::class.java),
             context.getString(R.string.app_name),
-            Icon.createWithResource(context, R.drawable.ic_inactive),
+            Icon.createWithResource(context, R.drawable.ic_coffee_bean),
             { it.run() },
             { /* result code ignored — no API to persist tile state */ },
         )

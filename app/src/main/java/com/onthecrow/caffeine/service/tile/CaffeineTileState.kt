@@ -10,7 +10,7 @@ data class CaffeineTileState(
     val state: Int = Tile.STATE_INACTIVE,
     @StringRes val label: Int = R.string.app_name,
     @StringRes val contentDescription: Int = R.string.tile_content_description,
-    @DrawableRes val icon: Int = R.drawable.ic_inactive,
+    @DrawableRes val icon: Int = R.drawable.ic_coffee_bean,
 )
 
 fun mapWakeLockStateToTileState(caffeineServiceState: CaffeineServiceState): CaffeineTileState {
@@ -20,8 +20,8 @@ fun mapWakeLockStateToTileState(caffeineServiceState: CaffeineServiceState): Caf
             CaffeineServiceState.ACTIVE -> Tile.STATE_ACTIVE
         },
         icon = when (caffeineServiceState) {
-            CaffeineServiceState.INACTIVE -> R.drawable.ic_inactive
-            CaffeineServiceState.ACTIVE -> R.drawable.ic_active
-        }
+            CaffeineServiceState.INACTIVE -> R.drawable.ic_coffee_bean
+            CaffeineServiceState.ACTIVE -> R.drawable.ic_coffee_bean_filled
+        },
     )
 }

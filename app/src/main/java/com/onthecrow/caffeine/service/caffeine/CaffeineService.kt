@@ -75,7 +75,7 @@ class CaffeineService : Service() {
     private fun createNotification(): Notification {
         createNotificationChannel()
         return NotificationCompat.Builder(applicationContext, ID_NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.ic_active)
+            .setSmallIcon(R.drawable.ic_coffee_bean_filled)
             .setContentTitle(getString(R.string.notification_title))
             .setContentText(getString(R.string.notification_subtitle))
             .setStyle(

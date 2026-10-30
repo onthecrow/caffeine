@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.firebaseCrashlytics)
 }
 
 // Release signing is read from signing/keystore.properties (git-ignored; see signing/README.md).
@@ -96,6 +98,12 @@ dependencies {
     implementation(libs.hilt)
     implementation("com.google.accompanist:accompanist-drawablepainter:0.35.0-alpha")
     implementation(libs.timber)
+
+    // Firebase (Analytics + Crashlytics) — release builds only
+    releaseImplementation(platform(libs.firebase.bom))
+    releaseImplementation(libs.firebase.analytics)
+    releaseImplementation(libs.firebase.crashlytics)
+
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
